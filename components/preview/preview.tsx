@@ -1,8 +1,11 @@
-import { cn } from "@/lib/utils";
+"use client"
+
 import { Dispatch, SetStateAction } from "react";
 import { Button } from "../ui/button";
 import { PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { RenderNode } from "./render-node";
+import { useEditor } from "@/store/editor";
 
 type PreviewProps = {
   codeInputOpen: boolean;
@@ -12,6 +15,9 @@ type PreviewProps = {
 }
 
 export default function Preview({ codeInputOpen, setCodeInputOpen, codeEditorOpen, setCodeEditorOpen }: PreviewProps) {
+  const tree = useEditor((s) => s.tree);
+  const selectNode = useEditor((s) => s.selectNode);
+
   const onPanelClick = (direction: 'left' | 'right') => {
     const isMobile = window.innerWidth < 768
     if (direction === 'left') {
@@ -24,45 +30,31 @@ export default function Preview({ codeInputOpen, setCodeInputOpen, codeEditorOpe
   }
 
   return (
-    <>
-      <div className="flex flex-1 flex-col min-w-0 bg-background">
-        <div className="flex h-10 items-center justify-between border-b px-3 shrink-0">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => onPanelClick('left')}
-              >
-                {codeInputOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{`${codeInputOpen ? 'Close' : 'Open'} Code`}</p>
-            </TooltipContent>
-          </Tooltip>
-          <span className="text-sm font-medium">Preview</span>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => onPanelClick('right')}
-              >
-                {codeEditorOpen ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{`${codeEditorOpen ? 'Close' : 'Open'} Editor`}</p>
-            </TooltipContent>
-          </Tooltip>
-        </div>
-        <div className="flex-1 overflow-auto p-4">
-          <p className="text-sm text-muted-foreground">Preview content goes here.</p>
-        </div>
+    <div className="flex flex-1 flex-col min-w-0 bg-background">
+      <div className="flex h-10 items-center justify-between border-b px-3 shrink-0">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => onPanelClick('left')}>
+              {codeInputOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent><p>{codeInputOpen ? 'Close' : 'Open'} Input</p></TooltipContent>
+        </Tooltip>
+        <span className="text-sm font-medium">Preview</span>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => onPanelClick('right')}>
+              {codeEditorOpen ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent><p>{codeEditorOpen ? 'Close' : 'Open'} Editor</p></TooltipContent>
+        </Tooltip>
       </div>
-    </>
+      <div className="flex-1 overflow-auto p-4" onClick={() => selectNode("")}>
+        {tree ? <RenderNode node={tree} /> : (
+          <p className="text-sm text-muted-foreground">Load JSX to preview it here.</p>
+        )}
+      </div>
+    </div>
   )
 }

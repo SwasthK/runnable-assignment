@@ -1,9 +1,24 @@
+"use client"
+
 import { cn } from "@/lib/utils";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { parseJSX } from "@/lib/parse-jsx";
+import { astToTree } from "@/lib/ast-to-tree";
+import { useEditor } from "@/store/editor";
 
 export default function CodeInput({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) {
+  const [input, setInput] = useState('<div className="text-xl text-muted">Hello World</div>')
+  const { setTree } = useEditor();
+
+  const handleLoad = () => {
+    const ast = parseJSX(input);
+    const tree = astToTree(ast);
+    setTree(tree)
+  };
+
   return (
     <>
       <div
@@ -16,12 +31,15 @@ export default function CodeInput({ open, setOpen }: { open: boolean, setOpen: D
         <div className="flex h-10 items-center border-b px-3 shrink-0">
           <Label htmlFor="code-input">Input</Label>
         </div>
-        <div className="flex-1 p-3 overflow-auto">
+        <div className="flex flex-col flex-1 gap-2 p-3 overflow-auto">
           <Textarea
             id="code-input"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message here."
-            className="h-full w-full resize-none bg-transparent text-sm outline-none"
+            className="flex-1 resize-none bg-transparent text-sm outline-none"
           />
+          <Button onClick={handleLoad} className="w-full shrink-0">Load Component</Button>
         </div>
       </div>
 

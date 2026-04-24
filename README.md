@@ -1,21 +1,59 @@
-# Next.js template
+# Runnable
 
-This is a Next.js template with shadcn/ui.
+- paste JSX,
+- convert it to a tree model,
+- preview and edit it visually,
+- save and reload versions from Postgres.
 
-## Adding components
+## Stack
 
-To add components to your app, run the following command:
+- Next.js (App Router)
+- React + TypeScript
+- Zustand (editor state)
+- Drizzle ORM + PostgreSQL (Neon)
+- Tailwind CSS + shadcn/ui
+
+## How It Works
+
+- Left panel: list saved components, or create a new one from JSX.
+- Center panel: iframe preview with click-to-select and inline text edit.
+- Right panel: basic style editor (font size, weight, text color, background color).
+- Save writes updated `source` + `tree` back to the database.
+
+## API Routes
+
+- `GET /api/component` - list saved components
+- `POST /api/component` - create component from source + parsed tree
+- `PUT /api/component/:id` - update source/tree
+- `GET /api/preview/:id` - fetch one saved component
+
+## Local Setup
+
+1. Install dependencies:
 
 ```bash
-npx shadcn@latest add button
+bun install
 ```
 
-This will place the ui components in the `components` directory.
+2. Create `.env`:
 
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
+```bash
+DATABASE_URL=postgresql://<user>:<password>@<host>/<db>?sslmode=require
 ```
+
+3. Start dev server:
+
+```bash
+bun run dev
+```
+
+4. Open `http://localhost:3000`.
+
+## Useful Scripts
+
+- `bun run dev` - start development server
+- `bun run build` - production build
+- `bun run start` - run built app
+- `bun run lint` - run ESLint
+- `bun run typecheck` - run TypeScript checks
+

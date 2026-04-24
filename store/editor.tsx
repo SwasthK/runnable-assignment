@@ -3,10 +3,16 @@ import { EditorState, TreeElementNode, TreeNode } from "@/types";
 
 export const useEditor = create<EditorState>((set) => ({
   tree: null,
+  componentId: null,
+  source: '<div className="text-xl text-muted">Hello World</div>',
   selectedId: null,
+  loading: false,
 
   setTree: (tree) => set({ tree }),
+  setComponentId: (id) => set({ componentId: id }),
+  setSource: (source) => set({ source }),
   selectNode: (id) => set({ selectedId: id || null }),
+  setLoading: (loading) => set({ loading }),
 
   updateNode: (id, updater) =>
     set((state) => ({

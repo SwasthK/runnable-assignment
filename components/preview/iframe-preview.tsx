@@ -4,9 +4,6 @@ import { useCallback, useEffect, useMemo, useRef } from "react"
 import { useEditor } from "@/store/editor"
 import { TreeElementNode, TreeNode, TreeTextNode } from "@/types"
 
-const EMPTY_PREVIEW_HTML =
-  "<p style='color:#888'>Load JSX to preview it here.</p>"
-
 const PREVIEW_STYLES = `
   [data-id] { cursor: pointer; position: relative; }
   [data-id]:hover:not(:has([data-id]:hover)) { outline: 1px dashed #93c5fd; }
@@ -143,7 +140,7 @@ export function IframePreview() {
   const updateNodeText = useEditor((s) => s.updateNodeText)
   const ref = useRef<HTMLIFrameElement>(null)
   const lastHtmlRef = useRef("")
-  const srcdoc = useMemo(() => buildPreviewDocument(EMPTY_PREVIEW_HTML), [])
+  const srcdoc = useMemo(() => buildPreviewDocument(""), [])
 
   const syncIframe = useCallback(() => {
     const doc = ref.current?.contentDocument
@@ -152,7 +149,7 @@ export function IframePreview() {
     const root = doc.getElementById("preview-root")
     if (!root) return
 
-    const nextHtml = tree ? treeToHtml(tree) : EMPTY_PREVIEW_HTML
+    const nextHtml = tree ? treeToHtml(tree) : ""
     if (nextHtml !== lastHtmlRef.current) {
       root.innerHTML = nextHtml
       lastHtmlRef.current = nextHtml

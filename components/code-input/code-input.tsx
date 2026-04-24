@@ -30,7 +30,7 @@ export default function CodeInput({
       setTree(component.tree)
       setComponentId(component.id)
       selectNode("")
-      window.history.replaceState(null, "", `/?id=${component.id}`)
+      window.history.replaceState(null, "", `?id=${component.id}`)
     },
     [selectNode, setComponentId, setSource, setTree]
   )

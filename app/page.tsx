@@ -64,7 +64,7 @@ export default function Page() {
         const params = new URLSearchParams(window.location.search)
         params.set("id", component.id)
         const query = params.toString()
-        window.history.replaceState(null, "", query ? `/?${query}` : "/")
+        window.history.replaceState(null, "", query ? `?${query}` : "/")
       } finally {
         if (active) setLoading(false)
       }

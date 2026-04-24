@@ -5,7 +5,7 @@ import CodeInput from "@/components/code-input/code-input"
 import CodeEditor from "@/components/code-editor/code-editor"
 import Preview from "@/components/preview/preview"
 import { useEditor } from "@/store/editor"
-import { StoredComponent } from "@/types"
+import { ComponentListItem, StoredComponent } from "@/types"
 
 export default function Page() {
   const [codeInputOpen, setCodeInputOpen] = useState(true)
@@ -27,25 +27,46 @@ export default function Page() {
   }, [codeInputOpen, codeEditorOpen])
 
   useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get("id")
-    if (!id) return
-
     let active = true
+
+    const loadPreviewById = async (id: string) => {
+      const res = await fetch(`/api/preview/${id}`)
+      if (!res.ok || !active) return null
+
+      const component = (await res.json()) as StoredComponent
+      if (!active) return null
+
+      setSource(component.source)
+      setTree(component.tree)
+      setComponentId(component.id)
+      return component
+    }
 
     const loadComponent = async () => {
       setLoading(true)
       try {
-        const res = await fetch(`/api/preview/${id}`)
-        if (!res.ok || !active) return
+        const id = new URLSearchParams(window.location.search).get("id")
 
-        const component = (await res.json()) as StoredComponent
-        if (!active) return
+        if (id) {
+          const component = await loadPreviewById(id)
+          if (component) return
+        }
 
-        setSource(component.source)
-        setTree(component.tree)
-        setComponentId(component.id)
+        const listRes = await fetch("/api/component")
+        if (!listRes.ok || !active) return
+
+        const [latest] = (await listRes.json()) as ComponentListItem[]
+        if (!latest?.id) return
+
+        const component = await loadPreviewById(latest.id)
+        if (!component || !active) return
+
+        const params = new URLSearchParams(window.location.search)
+        params.set("id", component.id)
+        const query = params.toString()
+        window.history.replaceState(null, "", query ? `/?${query}` : "/")
       } finally {
-        setLoading(false)
+        if (active) setLoading(false)
       }
     }
 

@@ -19,7 +19,7 @@ export function RenderNode({ node }: { node: TreeNode }) {
   const showLabel = isSelected || hovered;
 
   return (
-    <div style={{ position: "relative", display: "inline-block" }}>
+    <div style={{ position: "relative", display: "contents" }}>
       {showLabel && (
         <span style={{
           position: "absolute", top: -16, left: 0, zIndex: 50,

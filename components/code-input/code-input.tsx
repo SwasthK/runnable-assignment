@@ -37,7 +37,7 @@ export default function CodeInput({ open, setOpen }: { open: boolean, setOpen: D
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message here."
-            className="flex-1 resize-none bg-transparent text-sm outline-none"
+            className="w-full h-40 border rounded-md p-3 text-sm font-mono"
           />
           <Button onClick={handleLoad} className="w-full shrink-0">Load Component</Button>
         </div>

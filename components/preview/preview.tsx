@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 import { Button } from "../ui/button";
 import { PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { RenderNode } from "./render-node";
+import { IframePreview } from "./iframe-preview";
 import { useEditor } from "@/store/editor";
 
 type PreviewProps = {
@@ -50,10 +50,8 @@ export default function Preview({ codeInputOpen, setCodeInputOpen, codeEditorOpe
           <TooltipContent><p>{codeEditorOpen ? 'Close' : 'Open'} Editor</p></TooltipContent>
         </Tooltip>
       </div>
-      <div className="flex-1 overflow-auto p-4" onClick={() => selectNode("")}>
-        {tree ? <RenderNode node={tree} /> : (
-          <p className="text-sm text-muted-foreground">Load JSX to preview it here.</p>
-        )}
+      <div className="flex-1 overflow-auto bg-gray-50 shadow-sm">
+        <IframePreview />
       </div>
     </div>
   )

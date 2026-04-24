@@ -1,0 +1,9 @@
+export const FONT_WEIGHTS = [
+  "font-thin", "font-extralight", "font-light", "font-normal",
+  "font-medium", "font-semibold", "font-bold", "font-extrabold"
+];
+
+export const FONT_SIZES = [
+  "text-xs", "text-sm", "text-base", "text-lg", "text-xl", "text-2xl",
+  "text-3xl", "text-4xl", "text-5xl", "text-6xl", "text-7xl", "text-8xl",
+];

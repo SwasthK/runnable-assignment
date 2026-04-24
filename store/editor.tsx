@@ -12,7 +12,23 @@ export const useEditor = create<EditorState>((set) => ({
     set((state) => ({
       tree: updateTree(state.tree, id, updater),
     })),
+
+  updateNodeText: (id, text) =>
+    set((state) => ({
+      tree: updateTree(state.tree, id, (node) => setNodeText(node, text)),
+    })),
 }));
+
+function setNodeText(node: TreeNode, text: string) {
+  if ("value" in node) {
+    node.value = text;
+    return;
+  }
+
+  if (node.children.length === 1 && "value" in node.children[0]) {
+    node.children[0].value = text;
+  }
+}
 
 function updateTree(
   node: TreeNode | null,

@@ -19,6 +19,7 @@ type EditorState = {
   setTree: (tree: TreeElementNode | null) => void;
   selectNode: (id: string) => void;
   updateNode: (id: string, updater: (node: TreeNode) => void) => void;
+  updateNodeText: (id: string, text: string) => void;
 };
 
 
